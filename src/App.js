@@ -1,14 +1,12 @@
 import React, { Component }  from 'react';
-import logo from './logo.svg';
 import './App.css';
-import RadialChart from './RadialChart.js'
-import { returnStatement } from '@babel/types';
+import RadialChart from './RadialChart.js';
 
 
 export default class App extends Component {
   constructor(){
     super();
-    this.handleClick = this.handleClick.bind(this);
+    this.refreshData = this.refreshData.bind(this);
     this.state = 
     {
       iterator: 1,
@@ -17,27 +15,29 @@ export default class App extends Component {
     };
   }
 
-  handleClick(e)  {
-    this.setState({iterator: this.newMethod(this.state.iterator), percentage: this.state.iterator});
-    this.setState({percentage: this.state.iterator});
+  refreshData(temperature)  {
+    this.setState({iterator: this.iterate(this.state.iterator)});
+    this.setState({percentage: temperature});
   } 
-  newMethod(newIter) {
-    /*if(newIter % 29 === 0){
-      return "kek";
-    }
-    if(typeof newIter === 'string'){
-      return Math.floor(Math.random()*111);
-    }
-    return (newIter + 1 > 0 && newIter < 5) || (newIter % 5 === 0) ? newIter + 1 : newIter + 555;
-    if(newIter == 19)
-    {
-      this.setState({progressColor: 'rgb(219, 114, 119)'})
-    }*/
+  iterate(newIter) {
     return newIter + 1;
   }
 
   componentDidMount(){
-    this.interval = setInterval(() => this.handleClick(), 1000);
+    try {
+      setInterval(async () => {
+        const res = await fetch('http://localhost:52029/api/v2/sensors');
+        const sensorsData = await res.json();
+        var temperatureValue = sensorsData.temperature;
+        if (temperatureValue === undefined){
+          temperatureValue = "unknown";
+        }
+
+        this.refreshData(temperatureValue);
+      }, 10000);
+    } catch(e) {
+      console.log(e);
+    }
   }
   componentWillUnmount(){
     this.interval = null;
@@ -62,10 +62,6 @@ export default class App extends Component {
           </div>
       );
     }
-
-    /*<img src={logo} className="App-logo" alt="logo" />
-            <a className="specific-link" onClick={this.handleClick} href="#">Click here</a>*/
-
 }
 
 
