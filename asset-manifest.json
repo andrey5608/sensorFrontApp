@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/sensorFrontApp/static/css/main.4fc8a2e1.chunk.css",
+    "main.js": "/sensorFrontApp/static/js/main.2316a46b.chunk.js",
+    "main.js.map": "/sensorFrontApp/static/js/main.2316a46b.chunk.js.map",
+    "runtime-main.js": "/sensorFrontApp/static/js/runtime-main.1ec177f4.js",
+    "runtime-main.js.map": "/sensorFrontApp/static/js/runtime-main.1ec177f4.js.map",
+    "static/js/2.553f6f0f.chunk.js": "/sensorFrontApp/static/js/2.553f6f0f.chunk.js",
+    "static/js/2.553f6f0f.chunk.js.map": "/sensorFrontApp/static/js/2.553f6f0f.chunk.js.map",
+    "index.html": "/sensorFrontApp/index.html",
+    "precache-manifest.24aeaf4cbc192f7a790286accc73f8ea.js": "/sensorFrontApp/precache-manifest.24aeaf4cbc192f7a790286accc73f8ea.js",
+    "service-worker.js": "/sensorFrontApp/service-worker.js",
+    "static/css/main.4fc8a2e1.chunk.css.map": "/sensorFrontApp/static/css/main.4fc8a2e1.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1ec177f4.js",
+    "static/js/2.553f6f0f.chunk.js",
+    "static/css/main.4fc8a2e1.chunk.css",
+    "static/js/main.2316a46b.chunk.js"
+  ]
+}
