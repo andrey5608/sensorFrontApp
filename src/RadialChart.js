@@ -47,7 +47,9 @@ class RadialChart extends React.Component {
               x="50%"
               y="50%"
               dy=".3em"
-              textAnchor="middle">
+              textAnchor="middle"
+              style={{fill: this.props.textColor}}
+              >
               {`${this.props.percentage}°C`}
             </text>
         </svg>
@@ -57,7 +59,7 @@ class RadialChart extends React.Component {
   
   RadialChart.defaultProps = {
     sqSize: 200,
-    percentage: 25,
+    percentage: 0,
     strokeWidth: 10
   };
   export default RadialChart;

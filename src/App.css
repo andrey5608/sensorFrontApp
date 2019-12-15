@@ -21,10 +21,6 @@
   color: #04866c;
 }
 
-.specific-link{
-  color: rgb(228, 0, 11);
-}
-
 #app {
   margin-top: 40px;
 }
@@ -44,7 +40,6 @@
 }
 
 .circle-progress {
-  stroke: rgb(0, 204, 255);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -52,5 +47,4 @@
 .circle-text {
   font-size: 2em;
   font-weight: bold;
-  fill: rgb(95, 236, 255);
 }
