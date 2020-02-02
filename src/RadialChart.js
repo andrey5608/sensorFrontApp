@@ -16,7 +16,7 @@ class RadialChart extends React.Component {
       // Arc length at 100% coverage is the circle circumference
       const dashArray = radius * Math.PI * 2;
       // Scale 100% coverage overlay with the actual percent
-      const dashOffset = dashArray - dashArray * this.props.percentage / 45;
+      const dashOffset = dashArray - dashArray * this.props.percentage / this.props.maxValue;
   
       return (
         <svg
@@ -60,6 +60,7 @@ class RadialChart extends React.Component {
   RadialChart.defaultProps = {
     sqSize: 200,
     percentage: 0,
-    strokeWidth: 10
+    strokeWidth: 10,
+    maxValue: 100
   };
   export default RadialChart;

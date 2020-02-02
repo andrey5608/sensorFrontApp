@@ -1,57 +1,85 @@
 import React, { Component }  from 'react';
-import './App.css';
 import RadialChart from './RadialChart.js';
+import './App.css';
 
-const apiEnpoint = 'http://localhost:52029/api/v2/sensors';
+const apiEnpoint = 'http://192.168.0.174:8080/tempAndHumidity';
 const coldColor = 'rgba(95, 255, 255, 0.801)';
 const warmColor = 'rgba(255, 101, 101, 0.801)';
 
 export default class App extends Component {
   constructor(){
     super();
-    this.refreshData = this.refreshData.bind(this);
+    this.refreshTemperatureData = this.refreshTemperatureData.bind(this);
     this.state = 
     {
-      iterator: 1,
-      percentage: 0,
-      progressColor: coldColor,
-      textColor: coldColor
+      iterator: 0,
+      roomTemperature: 0,
+      boardTemperature: 0,
+      roomTempColor: coldColor,
+      boardTempColor: coldColor,
+      messages: undefined
     };
+    this.repeatThreeTimesForTest = this.repeatThreeTimesForTest.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
-  refreshData(temperature)  {
+  refreshTemperatureData(temperature)  {
     this.setState({
       iterator: this.state.iterator + 1,
-      percentage: temperature,
-      progressColor: this.defineColor(temperature),
-      textColor: this.defineColor(temperature)
+      roomTemperature: Number(temperature),
+      roomTempColor: this.defineColor(temperature, 21)      
+    });
+  }
+
+  refreshBoardInfo(temperature)  {
+    this.setState({
+      boardTemperature: Number(temperature),
+      boardTempColor: this.defineColor(temperature, 42)
     });
   }
   
-  defineColor(temperature) {
-    return temperature < 0 ? coldColor : warmColor;
+  defineColor(temperature, averageTemp) {
+    return temperature <= averageTemp ? coldColor : warmColor;
+  }
+
+  repeatThreeTimesForTest(){
+    var maxCount = 3;// we can show three time how app works without using an API
+    var randomNumber = 0;
+    
+    for(var i = 0; i < maxCount; i++){
+      randomNumber =  Math.floor(Math.random() * 9);
+        this.refreshTemperatureData(randomNumber);
+    }
   }
 
   componentDidMount(){
+    setTimeout(() => {this.repeatThreeTimesForTest()}, 10000);
+    this.setState({iterator: 0, percentage: 0, progressColor: coldColor, textColor: coldColor});
     try {
       setInterval (async () => {
         const res = await fetch(apiEnpoint).then((response) => {
           if (response.status !== 200) {
-            throw new Error("Bad response: " + response);
+            throw new Error(`Bad response: "${response}"`);
           }
           return response;
       });
-        const sensorsData = await res.json();
-        var temperatureValue = sensorsData.temperature;
-        if (temperatureValue === undefined){
+        const result = await res.json();
+        var temperatureValue = result.sensorsData.temperature;
+        var boardTempValue = result.sensorsData.boardCpuTemp;
+        if (temperatureValue === undefined && boardTempValue === undefined){
+          console.log("temperatureValue  and boardTempValue are undefined. set values as 0.")
           temperatureValue = 0;
+          boardTempValue = 0;
         }
-        this.refreshData(temperatureValue);
+        this.refreshTemperatureData(temperatureValue);
+        this.refreshBoardInfo(boardTempValue);
       }, 10000);
     } catch(e) {
-      this.refreshData(0);
+      this.refreshTemperatureData(0);
+      this.refreshBoardInfo(0);
     }
   }
+
   componentWillUnmount(){
     this.interval = null;
   }
@@ -59,20 +87,41 @@ export default class App extends Component {
   render () {
       return (        
         <div className="App">
-          <header className="App-header">            
-            <div id="chart">
-            <RadialChart
-              strokeWidth="10"
-              sqSize="200"
-              percentage={this.state.percentage}
-              progressColor={this.state.progressColor}
-              textColor={this.state.textColor}/>
+          <header className="App-header">           
+            This app should work fine with <a href="https://github.com/andrey5608/sensorApi">sensor API</a>
+          </header>
+        <div className="App-main">
+            <div id="roomTempChart">
+              Temperature in the room
+              <br />
+              <br />
+              <RadialChart
+                strokeWidth="10"
+                sqSize="200"
+                maxValue="40"
+                percentage={this.state.roomTemperature}
+                progressColor={this.state.roomTempColor}
+                textColor={this.state.roomTempColor}/>
+            </div>
+            <br />
+            <div id="boardTempChart">
+              Board temperature
+              <br />
+              <br />
+              <RadialChart
+                strokeWidth="10"
+                sqSize="200"
+                maxValue="100"
+                percentage={this.state.boardTemperature}
+                progressColor={this.state.boardTempColor}
+                textColor={this.state.boardTempColor}/>
             </div>
             <div id="iteration">                          
-            Iteration: {this.state.iterator}
+              Iteration: {this.state.iterator}
+            </div>
+            <div id='messages'>{this.state.messages !== undefined ? this.state.messages : ""}</div>
           </div>
-          </header>
-          </div>
+        </div>
       );
     }
 }
