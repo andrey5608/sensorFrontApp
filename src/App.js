@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import RadialChart from './RadialChart.js';
 import './App.css';
 
-const apiEnpoint = `http://${window.location.hostname}:8080/tempAndHumidity`;
+const apiEnpoint = `https://${window.location.hostname}/tempAndHumidity`;
 const coldColor = 'rgba(95, 255, 255, 0.801)';
 const warmColor = 'rgba(255, 101, 101, 0.801)';
 
